@@ -30,7 +30,7 @@ app.all("*", (req, res, next) => {
     next(new ExpressError("Page Not Found", 400));
 })
 
-//create a new repository in github with the name of garage and connect it to this ?
+//how to add .env in the .gitignore?
 
 app.use((err, req, res, next) => {
     const { status = 500 } = err;
