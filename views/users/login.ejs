@@ -1,0 +1,13 @@
+<% layout('layouts/boilerplate.ejs')%> <% if (typeof errorMessage !==
+'undefined' && errorMessage.length > 0) { %>
+<div class="alert alert-danger"><%= errorMessage[0] %></div>
+<% } %>
+
+<form action="/login" method="POST">
+	<label for="email">Email</label>
+	<input id="email" type="email" name="email" placeholder="email" />
+	<br />
+	<label for="password">password</label>
+	<input id="password" type="password" name="password" placeholder="password" />
+	<input type="submit" value="Submit" />
+</form>
