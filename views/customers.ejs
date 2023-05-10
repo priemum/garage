@@ -4,7 +4,7 @@
 <p>Email: <%= customers[i].email %></p>
 <p>Phone: <%= customers[i].phone %></p>
 <p>Total Orders: <%= customers[i].total_orders %></p>
-<form method="post" action="/customers/<%= customers[i].id %>?_method=DELETE" onsubmit="return confirm('Are you sure you want to delete this product?')">
+<form method="post" action="/customers/<%= customers[i].id %>?_method=DELETE" onsubmit="return confirm('Are you sure you want to delete this customer?')">
     <button type="submit" class="btn btn-danger">Delete</button>
 </form>
 <%}%>

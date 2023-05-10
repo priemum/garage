@@ -118,7 +118,7 @@ app.post('/customers', checkAuthenticated, (req, res) => {
 				if (err) {
 					throw err;
 				}
-		req.flash('success', 'Customer Added Succefully');
+				req.flash('success', 'Customer Added Succefully');
 				res.redirect('/customers');
 			});
 		}
@@ -127,19 +127,23 @@ app.post('/customers', checkAuthenticated, (req, res) => {
 
 app.delete('/customers/:id', (req, res) => {
 	const customerId = req.params.id;
-	db.query('DELETE FROM customers WHERE id = ?', [customerId], (err, result) => {
-		if (err) {
-			console.log(err);
-			res.sendStatus(500);
-			return;
+	db.query(
+		'DELETE FROM customers WHERE id = ?',
+		[customerId],
+		(err, result) => {
+			if (err) {
+				console.log(err);
+				res.sendStatus(500);
+				return;
+			}
+			if (result.affectedRows === 0) {
+				res.sendStatus(404);
+				return;
+			}
+			req.flash('success', 'Customer Deleted Succefully');
+			res.redirect('/customers');
 		}
-		if (result.affectedRows === 0) {
-			res.sendStatus(404);
-			return;
-		}
-		req.flash('success', 'Customer Deleted Succefully');
-		res.redirect('/customers');
-	});
+	);
 });
 //Products
 
@@ -175,7 +179,7 @@ app.post('/products', checkAuthenticated, (req, res) => {
 	);
 });
 
-app.delete('/products/:id', (req, res) => {
+app.delete('/products/:id', checkAuthenticated, (req, res) => {
 	const productId = req.params.id;
 	db.query('DELETE FROM products WHERE id = ?', [productId], (err, result) => {
 		if (err) {
@@ -189,6 +193,84 @@ app.delete('/products/:id', (req, res) => {
 		}
 		req.flash('success', 'Product Deleted Succefully');
 		res.redirect('/products');
+	});
+});
+//garage_items
+
+app.get('/garageItems', checkAuthenticated, (req, res) => {
+	db.query('SELECT * FROM garage_items', (err, garageItemsResult) => {
+		if (err) {
+			console.log(err);
+			res.sendStatus(500);
+			return;
+		}
+		db.query('SELECT * FROM categories', (err, categoriesResult) => {
+			if (err) {
+				console.log(err);
+				res.sendStatus(500);
+				return;
+			}
+			db.query('SELECT * FROM products', (err, productsResult) => {
+				if (err) {
+					console.log(err);
+					res.sendStatus(500);
+					return;
+				}
+				res.render('garageItems.ejs', {
+					garageItems: garageItemsResult,
+					categories: categoriesResult,
+					products: productsResult,
+				});
+			});
+		});
+	});
+});
+
+app.post('/garageItems', checkAuthenticated, (req, res) => {
+	const {
+		product_id,
+		description,
+		product_cost,
+		retail_price,
+		quantity_on_hand,
+		category_id,
+	} = req.body;
+	db.query(
+		'INSERT INTO garage_items (product_id, description, product_cost, retail_price, quantity_on_hand, category_id) VALUES (?, ?, ?, ?, ?, ?)',
+		[
+			product_id,
+			description,
+			product_cost,
+			retail_price,
+			quantity_on_hand,
+			category_id,
+		],
+		(err, result) => {
+			if (err) {
+				console.log(err);
+				res.sendStatus(500);
+				return;
+			}
+			req.flash('success', 'Item Added Succefully');
+			res.redirect('/garageItems');
+		}
+	);
+});
+
+app.delete('/garageItems/:id',checkAuthenticated,(req, res) => {
+	const garageId = req.params.id;
+	db.query('DELETE FROM garage_items WHERE id = ?', [garageId], (err, result) => {
+		if (err) {
+			console.log(err);
+			res.sendStatus(500);
+			return;
+		}
+		if (result.affectedRows === 0) {
+			res.sendStatus(404);
+			return;
+		}
+		req.flash('success', 'Item Deleted Succefully');
+		res.redirect('/garageItems');
 	});
 });
 

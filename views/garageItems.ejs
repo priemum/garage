@@ -1,0 +1,49 @@
+<% layout('layouts/boilerplate')%> <% for(var i=0; i < garageItems.length; i++)
+{ var category = categories.find(c => c.id === garageItems[i].category_id); var
+product = products.find(p => p.id === garageItems[i].product_id); %>
+
+<p>Product: <%= product.name %></p>
+<p>Description: <%= garageItems[i].description %></p>
+<p>Category: <%= category.name %></p>
+<p>Product Cost: <%= garageItems[i].product_cost %></p>
+<p>Retail Price: <%= garageItems[i].retail_price %></p>
+<p>Quantity on Hand: <%= garageItems[i].quantity_on_hand %></p>
+<form
+	method="post"
+	action="/garageItems/<%= garageItems[i].id %>?_method=DELETE"
+	onsubmit="return confirm('Are you sure you want to delete this Item?')">
+	<button type="submit" class="btn btn-danger">Delete</button>
+</form>
+<%}%>
+
+<form method="post" action="/garageItems">
+	<label for="product_id">Product</label>
+	<select id="product_id" name="product_id">
+		<% for(var i=0; i < products.length; i++) { %>
+			<option value="<%= products[i].id %>"><%= products[i].name %> (<%= products[i].universal_product_code %>)</option>
+		<% } %>
+	</select>
+	<br />
+	<label for="description">Description</label>
+	<input type="text" id="description" name="description" placeholder="description" />
+	<br />
+	<label for="product_cost">Product Cost</label>
+	<input type="text" id="product_cost" name="product_cost" placeholder="product cost" />
+	<br />
+	<label for="retail_price">Retail Price</label>
+	<input type="text" id="retail_price" name="retail_price" placeholder="retail price" />
+	<br />
+	<label for="quantity_on_hand">Quantity on Hand</label>
+	<input type="text" id="quantity_on_hand" name="quantity_on_hand" placeholder="quantity on hand" />
+	<br />
+	<label for="category_id">Category</label>
+	<select id="category_id" name="category_id">
+		<% for(var i=0; i < categories.length; i++) { %>
+			<option value="<%= categories[i].id %>"><%= categories[i].name %></option>
+		<% } %>
+	</select>
+	<br />
+	<br />
+	<button>Submit</button>
+</form>
+
