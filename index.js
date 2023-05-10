@@ -257,23 +257,83 @@ app.post('/garageItems', checkAuthenticated, (req, res) => {
 	);
 });
 
-app.delete('/garageItems/:id',checkAuthenticated,(req, res) => {
+app.delete('/garageItems/:id', checkAuthenticated, (req, res) => {
 	const garageId = req.params.id;
-	db.query('DELETE FROM garage_items WHERE id = ?', [garageId], (err, result) => {
+	db.query(
+		'DELETE FROM garage_items WHERE id = ?',
+		[garageId],
+		(err, result) => {
+			if (err) {
+				console.log(err);
+				res.sendStatus(500);
+				return;
+			}
+			if (result.affectedRows === 0) {
+				res.sendStatus(404);
+				return;
+			}
+			req.flash('success', 'Item Deleted Succefully');
+			res.redirect('/garageItems');
+		}
+	);
+});
+
+//categories
+
+app.get('/categories', checkAuthenticated, (req, res) => {
+	db.query('SELECT * FROM categories', (err, result) => {
 		if (err) {
 			console.log(err);
 			res.sendStatus(500);
 			return;
 		}
-		if (result.affectedRows === 0) {
-			res.sendStatus(404);
-			return;
-		}
-		req.flash('success', 'Item Deleted Succefully');
-		res.redirect('/garageItems');
+		res.render('categories.ejs', { categories: result });
 	});
 });
 
+app.post('/categories', checkAuthenticated, (req, res) => {
+	const { name } = req.body;
+	checkCategoryExists(req, name, (err, exists) => {
+		if (err) {
+			throw err;
+		}
+
+		if (exists) {
+			req.flash('error', 'Category already exists');
+			res.redirect('/categories');
+		} else {
+			const sql = 'INSERT INTO categories (name) VALUES (?)';
+			db.query(sql, [name], (err, result) => {
+				if (err) {
+					throw err;
+				}
+				req.flash('success', 'Category Added Succefully');
+				res.redirect('/categories');
+			});
+		}
+	});
+});
+
+app.delete('/categories/:id', checkAuthenticated, (req, res) => {
+	const categoryId = req.params.id;
+	db.query(
+		'DELETE FROM categories WHERE id = ?',
+		[categoryId],
+		(err, result) => {
+			if (err) {
+				console.log(err);
+				res.sendStatus(500);
+				return;
+			}
+			if (result.affectedRows === 0) {
+				res.sendStatus(404);
+				return;
+			}
+			req.flash('success', 'Category Deleted Succefully');
+			res.redirect('/categories');
+		}
+	);
+});
 app.all('*', (req, res, next) => {
 	next(new ExpressError('Page Not Found', 400));
 });
@@ -302,6 +362,16 @@ function checkNotAuthenticated(req, res, next) {
 function checkEmailExists(req, email, callback) {
 	const sql = 'SELECT * FROM customers WHERE email = ?';
 	db.query(sql, email, (err, result) => {
+		if (err) {
+			callback(err, null);
+		} else {
+			callback(null, result.length > 0);
+		}
+	});
+}
+function checkCategoryExists(req, name, callback) {
+	const sql = 'SELECT * FROM categories WHERE name = ?';
+	db.query(sql, name, (err, result) => {
 		if (err) {
 			callback(err, null);
 		} else {
