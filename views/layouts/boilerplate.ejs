@@ -13,6 +13,12 @@
 	</head>
 	<body class="d-flex flex-column vh-100">
 		<%-// include('../partials/navbar')%> <%-// include('../partials/flash')%>
+		<% if (typeof errorMessage !== 'undefined' && errorMessage.length > 0) {%>
+		<div class="alert alert-danger"><%= errorMessage[0]%></div>
+		<% } %> <% if (typeof successMessage !== 'undefined' &&
+		successMessage.length > 0) {%>
+		<div class="alert alert-success"><%= successMessage[0]%></div>
+		<% } %>
 		<main class="container mt-5"><%- body %></main>
 		<script
 			src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"

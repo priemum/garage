@@ -1,7 +1,4 @@
-<% layout('layouts/boilerplate.ejs')%> <% if (typeof errorMessage !==
-'undefined' && errorMessage.length > 0) { %>
-<div class="alert alert-danger"><%= errorMessage[0] %></div>
-<% } %>
+<% layout('layouts/boilerplate.ejs')%> 
 
 <form action="/login" method="POST">
 	<label for="email">Email</label>

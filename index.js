@@ -18,14 +18,14 @@ app.engine('ejs', ejsMate);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const mysqlConnection = mysql.createConnection({
+const db = mysql.createConnection({
 	host: process.env.DB_HOST,
 	user: process.env.DB_USER_NAME,
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_NAME,
 });
 
-mysqlConnection.connect((err) => {
+db.connect((err) => {
 	if (!err) {
 		console.log('DB connection succeeded');
 	} else {
@@ -67,15 +67,12 @@ app.use(methodOverride('_method'));
 
 app.use((req, res, next) => {
 	res.locals.errorMessage = req.flash('error');
+	res.locals.successMessage = req.flash('success');
 	next();
 });
 
 app.get('/', (req, res) => {
-	res.send('Good Job!');
-});
-
-app.get('/test', checkAuthenticated, (req, res) => {
-	res.send('You are logged in');
+	res.render('home.ejs');
 });
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
@@ -91,6 +88,109 @@ app.post(
 		failureFlash: true,
 	})
 );
+
+app.get('/customers', checkAuthenticated, (req, res) => {
+	const sql =
+		'SELECT customers.*, COUNT(orders.id) AS total_orders FROM customers LEFT JOIN orders ON customers.id = orders.customer_id GROUP BY customers.id';
+	db.query(sql, (err, result) => {
+		if (err) {
+			throw err;
+		}
+		res.render('customers.ejs', { customers: result });
+	});
+});
+
+// Add a new customer
+app.post('/customers', checkAuthenticated, (req, res) => {
+	const { name, email, phone } = req.body;
+
+	checkEmailExists(req, email, (err, exists) => {
+		if (err) {
+			throw err;
+		}
+
+		if (exists) {
+			req.flash('error', 'Email already exists');
+			res.redirect('/customers');
+		} else {
+			const sql = 'INSERT INTO customers (name, email, phone) VALUES (?, ?, ?)';
+			db.query(sql, [name, email, phone], (err, result) => {
+				if (err) {
+					throw err;
+				}
+		req.flash('success', 'Customer Added Succefully');
+				res.redirect('/customers');
+			});
+		}
+	});
+});
+
+app.delete('/customers/:id', (req, res) => {
+	const customerId = req.params.id;
+	db.query('DELETE FROM customers WHERE id = ?', [customerId], (err, result) => {
+		if (err) {
+			console.log(err);
+			res.sendStatus(500);
+			return;
+		}
+		if (result.affectedRows === 0) {
+			res.sendStatus(404);
+			return;
+		}
+		req.flash('success', 'Customer Deleted Succefully');
+		res.redirect('/customers');
+	});
+});
+//Products
+
+app.get('/products', checkAuthenticated, (req, res) => {
+	db.query('SELECT * FROM products', (err, result) => {
+		if (err) {
+			console.log(err);
+			res.sendStatus(500);
+			return;
+		}
+		res.render('products.ejs', { products: result });
+	});
+});
+
+app.post('/products', checkAuthenticated, (req, res) => {
+	const product = req.body;
+	db.query(
+		'INSERT INTO products (name, universal_product_code) VALUES (?, ?)',
+		[product.name, product.upc],
+		(err, result) => {
+			if (err) {
+				console.log(err);
+				res.sendStatus(500);
+				return;
+			}
+			const newProduct = {
+				name: product.name,
+				upc: product.upc,
+			};
+			req.flash('success', 'Product Added Succefully');
+			res.redirect('/products');
+		}
+	);
+});
+
+app.delete('/products/:id', (req, res) => {
+	const productId = req.params.id;
+	db.query('DELETE FROM products WHERE id = ?', [productId], (err, result) => {
+		if (err) {
+			console.log(err);
+			res.sendStatus(500);
+			return;
+		}
+		if (result.affectedRows === 0) {
+			res.sendStatus(404);
+			return;
+		}
+		req.flash('success', 'Product Deleted Succefully');
+		res.redirect('/products');
+	});
+});
 
 app.all('*', (req, res, next) => {
 	next(new ExpressError('Page Not Found', 400));
@@ -115,6 +215,17 @@ function checkNotAuthenticated(req, res, next) {
 		return res.redirect('/');
 	}
 	next();
+}
+
+function checkEmailExists(req, email, callback) {
+	const sql = 'SELECT * FROM customers WHERE email = ?';
+	db.query(sql, email, (err, result) => {
+		if (err) {
+			callback(err, null);
+		} else {
+			callback(null, result.length > 0);
+		}
+	});
 }
 
 const port = 5000;
