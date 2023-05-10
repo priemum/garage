@@ -27,8 +27,8 @@ CREATE TABLE garage_items (
     retail_price DECIMAL(10, 2),
     quantity_on_hand INT,
     category_id INT NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES categories(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE orders (
@@ -39,8 +39,8 @@ CREATE TABLE orders (
   garage_item_id INT NOT NULL,
   quantity INT NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (customer_id) REFERENCES customers(id),
-  FOREIGN KEY (garage_item_id) REFERENCES garage_items(id)
+  FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
+  FOREIGN KEY (garage_item_id) REFERENCES garage_items(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE monthly_profit_cost (
