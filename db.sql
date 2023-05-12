@@ -33,7 +33,7 @@ CREATE TABLE garage_items (
 
 CREATE TABLE orders (
   id INT NOT NULL AUTO_INCREMENT,
-  customer_id INT NOT NULL,
+  customer_id INT,
   order_date DATE NOT NULL,
   order_type ENUM('sell', 'buy') NOT NULL,
   garage_item_id INT NOT NULL,
@@ -59,15 +59,69 @@ AFTER INSERT ON orders
 FOR EACH ROW
 BEGIN
   IF NEW.order_type = 'sell' THEN
-    UPDATE monthly_profit_cost
-    SET profit = profit + (NEW.quantity * (SELECT retail_price FROM garage_items WHERE id = NEW.garage_item_id)),
-        pure_profit = pure_profit + (NEW.quantity * (SELECT retail_price - product_cost FROM garage_items JOIN products ON garage_items.product_id = products.id WHERE garage_items.id = NEW.garage_item_id))
-    WHERE year = EXTRACT(YEAR FROM NEW.order_date) AND month = EXTRACT(MONTH FROM NEW.order_date) AND NEW.quantity <= (SELECT quantity_on_hand FROM garage_items WHERE id = NEW.garage_item_id);
+    INSERT INTO monthly_profit_cost (year, month, profit, cost, pure_profit)
+    VALUES (
+      EXTRACT(YEAR FROM NEW.order_date),
+      EXTRACT(MONTH FROM NEW.order_date),
+      (NEW.quantity * (SELECT retail_price FROM garage_items WHERE id = NEW.garage_item_id)),
+      0,
+      (NEW.quantity * (SELECT retail_price - product_cost FROM garage_items JOIN products ON garage_items.product_id = products.id WHERE garage_items.id = NEW.garage_item_id))
+    )
+    ON DUPLICATE KEY UPDATE
+      profit = profit + (NEW.quantity * (SELECT retail_price FROM garage_items WHERE id = NEW.garage_item_id)),
+      pure_profit = pure_profit + (NEW.quantity * (SELECT retail_price - product_cost FROM garage_items JOIN products ON garage_items.product_id = products.id WHERE garage_items.id = NEW.garage_item_id)),
+      cost = cost;
+    
+    IF NEW.quantity <= (SELECT quantity_on_hand FROM garage_items WHERE id = NEW.garage_item_id) THEN
+        UPDATE monthly_profit_cost
+        SET cost = cost,
+            profit = profit - (NEW.quantity * (SELECT retail_price FROM garage_items WHERE id = NEW.garage_item_id))
+        WHERE year = EXTRACT(YEAR FROM NEW.order_date) AND month = EXTRACT(MONTH FROM NEW.order_date);
+    END IF;
+    
   ELSEIF NEW.order_type = 'buy' THEN
-    UPDATE monthly_profit_cost
-    SET cost = cost + (NEW.quantity * (SELECT product_cost FROM garage_items WHERE id = NEW.garage_item_id)),
-        pure_profit = pure_profit - (NEW.quantity * (SELECT product_cost FROM garage_items WHERE id = NEW.garage_item_id))
-    WHERE year = EXTRACT(YEAR FROM NEW.order_date) AND month = EXTRACT(MONTH FROM NEW.order_date) AND NEW.quantity <= (SELECT quantity_on_hand FROM garage_items WHERE id = NEW.garage_item_id);
+    INSERT INTO monthly_profit_cost (year, month, profit, cost, pure_profit)
+    VALUES (
+      EXTRACT(YEAR FROM NEW.order_date),
+      EXTRACT(MONTH FROM NEW.order_date),
+      0,
+      (NEW.quantity * (SELECT product_cost FROM garage_items WHERE id = NEW.garage_item_id)),
+      (-NEW.quantity * (SELECT product_cost FROM garage_items WHERE id = NEW.garage_item_id))
+    )
+    ON DUPLICATE KEY UPDATE
+      cost = cost + (NEW.quantity * (SELECT product_cost FROM garage_items WHERE id = NEW.garage_item_id)),
+      pure_profit = pure_profit - (NEW.quantity * (SELECT product_cost FROM garage_items WHERE id = NEW.garage_item_id)),
+      profit = profit;
+    
+    IF NEW.quantity <= (SELECT quantity_on_hand FROM garage_items WHERE id = NEW.garage_item_id) THEN
+        UPDATE monthly_profit_cost
+        SET cost = cost + (NEW.quantity * (SELECT product_cost FROM garage_items WHERE id = NEW.garage_item_id)),
+            profit = profit + (NEW.quantity * (SELECT product_cost FROM garage_items WHERE id = NEW.garage_item_id))
+        WHERE year = EXTRACT(YEAR FROM NEW.order_date) AND month = EXTRACT(MONTH FROM NEW.order_date);
+    END IF;
+    
   END IF;
 END$$
 DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER delete_order_trigger
+AFTER DELETE ON orders
+FOR EACH ROW
+BEGIN
+  IF OLD.order_type = 'sell' THEN
+    UPDATE monthly_profit_cost
+    SET profit = profit - (OLD.quantity * (SELECT retail_price - product_cost FROM garage_items JOIN products ON garage_items.product_id = products.id WHERE garage_items.id = OLD.garage_item_id)),
+        pure_profit = pure_profit - (OLD.quantity * (SELECT retail_price - product_cost FROM garage_items JOIN products ON garage_items.product_id = products.id WHERE garage_items.id = OLD.garage_item_id))
+    WHERE year = EXTRACT(YEAR FROM OLD.order_date) AND month = EXTRACT(MONTH FROM OLD.order_date);
+  ELSEIF OLD.order_type = 'buy' THEN
+    UPDATE monthly_profit_cost
+    SET cost = cost - (OLD.quantity * (SELECT product_cost FROM garage_items WHERE id = OLD.garage_item_id)),
+        pure_profit = pure_profit + (OLD.quantity * (SELECT product_cost FROM garage_items WHERE id = OLD.garage_item_id))
+    WHERE year = EXTRACT(YEAR FROM OLD.order_date) AND month = EXTRACT(MONTH FROM OLD.order_date);
+  END IF;
+END$$
+DELIMITER ;
+
+
