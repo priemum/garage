@@ -1,0 +1,10 @@
+<% layout('layouts/boilerplate')%>
+<h1>Create Category</h1>
+
+<form method="POST" action="/categories">
+	<div>
+		<label for="name">Name</label>
+		<input type="text" name="name" id="name" required />
+	</div>
+	<button type="submit">Create Category</button>
+</form>

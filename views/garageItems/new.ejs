@@ -1,0 +1,51 @@
+<% layout('layouts/boilerplate')%>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Create a New Garage Item</h1>
+			<form method="post" action="/garageItems">
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<th>Product</th>
+							<td>
+								<select id="product_id" name="product_id" class="form-control">
+									<% for(var i=0; i < products.length; i++) { %>
+										<option value="<%= products[i].id %>"><%= products[i].name %> (<%= products[i].universal_product_code %>)</option>
+									<% } %>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th>Description</th>
+							<td><input type="text" id="description" name="description" placeholder="description" class="form-control" /></td>
+						</tr>
+						<tr>
+							<th>Product Cost</th>
+							<td><input type="text" id="product_cost" name="product_cost" placeholder="product cost" class="form-control" /></td>
+						</tr>
+						<tr>
+							<th>Retail Price</th>
+							<td><input type="text" id="retail_price" name="retail_price" placeholder="retail price" class="form-control" /></td>
+						</tr>
+						<tr>
+							<th>Quantity on Hand</th>
+							<td><input type="text" id="quantity_on_hand" name="quantity_on_hand" placeholder="quantity on hand" class="form-control" /></td>
+						</tr>
+						<tr>
+							<th>Category</th>
+							<td>
+								<select id="category_id" name="category_id" class="form-control">
+									<% for(var i=0; i < categories.length; i++) { %>
+										<option value="<%= categories[i].id %>"><%= categories[i].name %></option>
+									<% } %>
+								</select>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+</div>

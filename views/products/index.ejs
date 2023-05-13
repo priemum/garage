@@ -1,0 +1,27 @@
+<% layout('layouts/boilerplate')%>
+<h1>Products</h1>
+<a href="/products/new" class="btn btn-primary mb-3">New Product</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>UPC</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <% products.forEach(function(product) { %>
+            <tr>
+                <td><%= product.name %></td>
+                <td><%= product.universal_product_code %></td>
+                <td>
+                    <form action="/products/<%= product.id %>?_method=DELETE" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+

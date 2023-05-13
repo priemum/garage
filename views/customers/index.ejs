@@ -1,0 +1,35 @@
+<% layout('layouts/boilerplate')%>
+<h1>Customers</h1>
+<a href="/customers/new" class="btn btn-primary">New Customer</a>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Phone</th>
+			<th>Total Orders</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% customers.forEach(customer => { %>
+		<tr>
+			<td><%= customer.name %></td>
+			<td><%= customer.email %></td>
+			<td><%= customer.phone %></td>
+			<td><%= customer.total_orders || 0 %></td>
+			<td>
+				<a href="/customers/<%= customer.id %>/edit" class="btn btn-primary"
+					>Edit</a
+				>
+				<form
+					method="post"
+					action="/customers/<%= customer.id %>?_method=DELETE"
+					style="display: inline-block">
+					<button type="submit" class="btn btn-danger">Delete</button>
+				</form>
+			</td>
+		</tr>
+		<% }); %>
+	</tbody>
+</table>
