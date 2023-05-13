@@ -1,0 +1,8 @@
+<% layout('layouts/boilerplate')%> 
+<% for(var i=0; i < monthly_profit_cost.length; i++) {%>
+<p>Year: <%= monthly_profit_cost[i].year %></p>
+<p>Month: <%= monthly_profit_cost[i].month %></p>
+<p>Revenue: <%= monthly_profit_cost[i].revenue %></p>
+<p>Cost: <%= monthly_profit_cost[i].cost %></p>
+<p>Profit: <%= monthly_profit_cost[i].profit %></p>
+<%}%>

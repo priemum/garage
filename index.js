@@ -488,6 +488,16 @@ app.delete('/orders/:id', checkAuthenticated, (req, res) => {
 	});
 });
 
+app.get('/monthly_profit_cost', checkAuthenticated, (req, res) => {
+	db.query('SELECT * FROM monthly_profit_cost', (err, result) => {
+		if (err) {
+			console.log(err);
+			res.sendStatus(500);
+			return;
+		}
+		res.render('revenues.ejs', { monthly_profit_cost: result });
+	});
+});
 
 app.all('*', (req, res, next) => {
 	next(new ExpressError('Page Not Found', 400));
