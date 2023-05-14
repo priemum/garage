@@ -12,6 +12,7 @@ const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const ExpressError = require('./ExpressError');
 const db = require('./models/db');
+const path = require('path');
 
 app.engine('ejs', ejsMate);
 app.use(bodyParser.json());
@@ -35,8 +36,8 @@ initializePassport(
 	(id) => users.find((user) => user.id === id)
 );
 
-app.use(express.static('public'));
 app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname,'public')));
 app.use(flash());
 app.use(
 	session({
@@ -86,8 +87,13 @@ app.post(
 );
 
 app.get('/logout', (req, res) => {
-	req.logout();
-	res.redirect('/login');
+	req.logout(function (err) {
+		if (err) {
+			// handle error
+			return req.flash('error',err.message);
+		}
+		res.redirect('/login');
+	});
 });
 
 app.get('/monthly_profit_cost', checkAuthenticated, (req, res) => {
