@@ -3,6 +3,7 @@ const Product = require('../models/product');
 const Customer = require('../models/customer');
 const GarageItem = require('../models/garageItem');
 const db = require('../models/db');
+const validateOrder = require('../validation/order');
 
 exports.index = (req, res, next) => {
 	Order.findAll((err, orders) => {
@@ -69,6 +70,12 @@ exports.new = (req, res) => {
 exports.create = (req, res) => {
 	const { customer_id, garage_item_id, order_date, order_type, quantity } =
 		req.body;
+	try {
+		validateOrder(req.body);
+	} catch (err) {
+		req.flash('error', err.message);
+		return res.redirect("/orders/new");
+	}
 	const checkQtySql = 'SELECT quantity_on_hand FROM garage_items WHERE id = ?';
 	const sql =
 		'INSERT INTO orders (customer_id, order_date, order_type, garage_item_id, quantity) VALUES (?, ?, ?, ?, ?)';

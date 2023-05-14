@@ -1,5 +1,6 @@
 const Customer = require('../models/customer');
 const checkEmailExists = require('../middleware/checkEmailExists');
+const validateCustomer = require('../validation/cutomers');
 
 exports.index = (req, res, next) => {
   Customer.findAll((err, customers) => {
@@ -16,6 +17,12 @@ exports.new = (req, res) => {
 
 exports.create = (req, res, next) => {
 	const { name, email, phone } = req.body;
+	try {
+		validateCustomer(req.body);
+	} catch (err) {
+		req.flash('error', err.message);
+		return res.redirect('/customers/new');
+	}
 	checkEmailExists(null, email, (err, exists) => {
 		if (err) {
 			return callback(err);

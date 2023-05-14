@@ -12,13 +12,13 @@
 	<select id="garage_item_id" name="garage_item_id" onchange="calculateTotalPrice()">
 		<% for(var i=0; i < garageItems.length; i++) { var product =
 		products.find(p=>p.id==garageItems[i].product_id) %>
-		<option value="<%= garageItems[i].id %>"><%= product.name%></option>
+		<option value="<%= garageItems[i].id %>"><%= product.name%> (<%=garageItems[i].description%>)</option>
 		<% } %>
 	</select>
 	<br />
 
 	<label for="order_date">Order Date</label>
-	<input type="date" id="order_date" name="order_date" required />
+	<input type="date" id="order_date" name="order_date" value="<%=new Date().toISOString().substr(0, 10)%>" required />
 	<br />
 
 	<label for="order_type">Order Type</label>

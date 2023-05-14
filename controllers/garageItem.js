@@ -1,7 +1,8 @@
-const db = require('../models/db')
+const db = require('../models/db');
 const GarageItem = require('../models/garageItem');
 const Product = require('../models/product');
 const Category = require('../models/category');
+const validateGarageItem = require('../validation/garageItems');
 
 exports.index = (req, res) => {
 	GarageItem.findAll((err, garageItemsResult) => {
@@ -55,9 +56,15 @@ exports.new = (req, res) => {
 
 exports.create = (req, res) => {
 	const garageItem = req.body;
+	try {
+		validateGarageItem(garageItem);
+	} catch (err) {
+		req.flash('error', err.message);
+		return res.redirect('/garageItems/new');
+	}
 	GarageItem.create(garageItem, (err, result) => {
 		if (err) {
-			console.log(err);
+			console.log(err.code);
 			res.sendStatus(500);
 			return;
 		}
