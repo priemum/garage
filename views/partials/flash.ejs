@@ -1,0 +1,6 @@
+<% if (typeof errorMessage !== 'undefined' && errorMessage.length > 0) {%>
+<div class="alert alert-danger"><%= errorMessage[0]%></div>
+<% } %> 
+<% if (typeof successMessage !== 'undefined' && successMessage.length >0) {%>
+<div class="alert alert-success"><%= successMessage[0]%></div>
+<% } %>

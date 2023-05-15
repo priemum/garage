@@ -5,7 +5,7 @@
 		<meta
 			name="viewport"
 			content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-		<title>Garage</title>
+		<title>Garage Management</title>
 
 		<!-- Favicon -->
 		<link rel="shortcut icon" href="assets/images/logo/favicon.png" />
@@ -19,13 +19,7 @@
 	<body>
 		<div class="app">
 			<div class="container-fluid">
-				<% if (typeof errorMessage !== 'undefined' && errorMessage.length > 0)
-				{%>
-				<div class="alert alert-danger"><%= errorMessage[0]%></div>
-				<% } %> <% if (typeof successMessage !== 'undefined' &&
-				successMessage.length > 0) {%>
-				<div class="alert alert-success"><%= successMessage[0]%></div>
-				<% } %>
+				<%- include('../partials/flash.ejs')%>
 				<div
 					class="d-flex full-height p-v-15 flex-column justify-content-between">
 					<div class="d-none d-md-flex p-h-40">
