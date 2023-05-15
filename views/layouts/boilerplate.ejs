@@ -7,14 +7,14 @@
 		<title>Garage</title>
 		<!-- Favicon -->
 		<link rel="shortcut icon" href="/assets/images/logo/favicon.png" />
-
 		<!-- page css -->
-
+		<link
+			href="/assets/vendors/datatables/dataTables.bootstrap.min.css"
+			rel="stylesheet" />
 		<!-- Core css -->
 		<link href="/assets/css/app.min.css" rel="stylesheet" />
 	</head>
 	<body>
-		<%-// include('../partials/navbar')%> <%-// include('../partials/flash')%>
 		<% if (typeof errorMessage !== 'undefined' && errorMessage.length > 0) {%>
 		<div class="alert alert-danger"><%= errorMessage[0]%></div>
 		<% } %> <% if (typeof successMessage !== 'undefined' &&
@@ -122,6 +122,9 @@
 								<ul class="dropdown-menu">
 									<li class="navItem">
 										<a href="/monthly_profit_cost">Revenues</a>
+									</li>
+									<li class="navItem">
+										<a href="/customers">Customers</a>
 									</li>
 									<li class="navItem">
 										<a href="/products">Product</a>
@@ -453,17 +456,7 @@
 				<div class="page-container">
 					<!-- Content Wrapper START -->
 					<div class="main-content"><%- body %></div>
-					<footer class="footer">
-						<div class="footer-content justify-content-between">
-							<p class="m-b-0">
-								Copyright © 2019 Theme_Nate. All rights reserved.
-							</p>
-							<span>
-								<a href="" class="text-gray m-r-15">Term &amp; Conditions</a>
-								<a href="" class="text-gray">Privacy &amp; Policy</a>
-							</span>
-						</div>
-					</footer>
+					<%- include('../partials/footer.ejs')%>
 				</div>
 				<!-- Quick View START -->
 				<div class="modal modal-right fade quick-view" id="quick-view">
@@ -552,9 +545,17 @@
 				<!-- Quick View END -->
 			</div>
 		</div>
+		<script src="/assets/js/pages/dashboard-default.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="/assets/js/vendors.min.js"></script>
 		<script src="/assets/vendors/chartjs/Chart.min.js"></script>
-		<script src="/assets/js/pages/dashboard-default.js"></script>
+		<script src="/assets/vendors/datatables/jquery.dataTables.min.js"></script>
+		<script src="/assets/vendors/datatables/dataTables.bootstrap.min.js"></script>
 		<script src="/assets/js/app.min.js"></script>
+		<script>
+			$(document).ready(function () {
+				$('#data-table').DataTable();
+			});
+		</script>
 	</body>
 </html>

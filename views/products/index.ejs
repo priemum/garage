@@ -1,27 +1,63 @@
 <% layout('layouts/boilerplate')%>
-<h1>Products</h1>
-<a href="/products/new" class="btn btn-primary mb-3">New Product</a>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>UPC</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <% products.forEach(function(product) { %>
-            <tr>
-                <td><%= product.name %></td>
-                <td><%= product.universal_product_code %></td>
-                <td>
-                    <form action="/products/<%= product.id %>?_method=DELETE" method="POST" class="d-inline">
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        <% }); %>
-    </tbody>
-</table>
-
+<div class="page-header">
+	<h2 class="header-title">Products List</h2>
+	<div class="header-sub-title">
+		<nav class="breadcrumb breadcrumb-dash">
+			<a href="#" class="breadcrumb-item"
+				><i class="anticon anticon-home m-r-5"></i>Home</a
+			>
+			<a class="breadcrumb-item" href="#">Products</a>
+			<span class="breadcrumb-item active">Products List</span>
+		</nav>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+		<div class="row m-b-30">
+			<div class="col-lg-8">
+				<div class="d-md-flex">
+					<div class="m-b-10 m-r-15"></div>
+					<div class="m-b-10"></div>
+				</div>
+			</div>
+			<div class="col-lg-4 text-right">
+				<a class="btn btn-primary" href="/products/new">
+					<i class="anticon anticon-plus-circle m-r-5"></i>
+					<span>Add Item</span>
+				</a>
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-hover e-commerce-table" id="data-table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>UPC</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% products.forEach(function(product) { %>
+					<tr>
+						<td><%= product.name %></td>
+						<td><%= product.universal_product_code %></td>
+						<td class="text-right">
+							<form
+								action="/products/<%= product.id %>?_method=DELETE"
+								method="POST"
+								class="d-inline">
+								<button
+									type="submit"
+									class="btn btn-icon btn-danger btn-hover btn-sm btn-rounded"
+									onclick="event.stopPropagation()">
+									<i class="anticon anticon-delete"></i>
+								</button>
+							</form>
+						</td>
+					</tr>
+					<% }); %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

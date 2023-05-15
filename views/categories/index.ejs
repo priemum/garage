@@ -1,25 +1,58 @@
 <% layout('layouts/boilerplate')%>
-<h1>categories</h1>
-<a href="/categories/new" class="btn btn-primary mb-3">New Category</a>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <% categories.forEach(function(category) { %>
-            <tr>
-                <td><%= category.name %></td>
-                <td>
-                    <form action="/categories/<%= category.id %>?_method=DELETE" method="POST" class="d-inline">
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        <% }); %>
-    </tbody>
-</table>
-
+<div class="page-header">
+	<h2 class="header-title">Categories List</h2>
+	<div class="header-sub-title">
+		<nav class="breadcrumb breadcrumb-dash">
+			<a href="#" class="breadcrumb-item"
+				><i class="anticon anticon-home m-r-5"></i>Home</a
+			>
+			<a class="breadcrumb-item" href="#">Categories</a>
+			<span class="breadcrumb-item active">Categories List</span>
+		</nav>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+		<div class="row m-b-30">
+			<div class="col-lg-8">
+				<div class="d-md-flex">
+					<div class="m-b-10 m-r-15"></div>
+					<div class="m-b-10"></div>
+				</div>
+			</div>
+			<div class="col-lg-4 text-right">
+				<a class="btn btn-primary" href="/categories/new">
+					<i class="anticon anticon-plus-circle m-r-5"></i>
+					<span>New Category</span>
+				</a>
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% categories.forEach(function(category) { %>
+					<tr>
+						<td><%= category.name %></td>
+						<td>
+							<form
+								action="/categories/<%= category.id %>?_method=DELETE"
+								method="POST"
+								class="d-inline">
+								<button type="submit" class="btn btn-danger btn-sm">
+									Delete
+								</button>
+							</form>
+						</td>
+					</tr>
+					<% }); %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

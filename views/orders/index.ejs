@@ -1,55 +1,101 @@
 <% layout('layouts/boilerplate')%>
-<h1>Orders</h1>
-<a href="/orders/new" class="btn btn-primary">New Order</a>
-<table class="table">
-	<thead>
-		<tr>
-			<th>Customer Name</th>
-			<th>Order Date</th>
-			<th>Order Type</th>
-			<th>Garage Item</th>
-			<th>Quantity</th>
-			<th>Revenue</th>
-			<th>Cost</th>
-		</tr>
-	</thead>
-	<tbody>
-		<% for(var i=0; i < orders.length; i++) { var customer = customers.find(c =>
-		c.id === orders[i].customer_id); var item =
-		garageItems.find(g=>g.id==orders[i].garage_item_id ); var product =
-		products.find(p => p.id === item.product_id); var revenue =
-		orders[i].order_type === 'sell' ? (item.retail_price) * orders[i].quantity :
-		0; var cost = orders[i].order_type === 'buy' ? item.product_cost *
-		orders[i].quantity : 0; %> 
-		<tr>
-            <% if (typeof customer !== 'undefined') { %>
-			<td><%= customer.name %></td>
-            <%}else{%>
-			<td>NULL</td>
-            <%}%>
-			<td><%= orders[i].order_date %></td>
-			<td><%= orders[i].order_type %></td>
-			<td><%= product.name %></td>
-			<td><%= orders[i].quantity %></td>
-			<% if (orders[i].order_type === 'sell') { %>
-			<td><%= revenue %></td>
-			<% } else { %>
-			<td>---</td>
-			<% } %>
-            <%if (orders[i].order_type === 'buy') {%>
-            <td><%= cost %></td>
-			<% } else { %>
-			<td>---</td>
-			<% } %>
-			<td>
-				<form
-					method="post"
-					action="/orders/<%= orders[i].id %>?_method=DELETE"
-					onsubmit="return confirm('Are you sure you want to delete this order?')">
-					<button type="submit" class="btn btn-danger">Delete</button>
-				</form>
-			</td>
-		</tr>
-		<% } %>
-	</tbody>
-</table>
+<div class="page-header">
+	<h2 class="header-title">Orders List</h2>
+	<div class="header-sub-title">
+		<nav class="breadcrumb breadcrumb-dash">
+			<a href="#" class="breadcrumb-item"
+				><i class="anticon anticon-home m-r-5"></i>Home</a
+			>
+			<a class="breadcrumb-item" href="#">Orders</a>
+			<span class="breadcrumb-item active">Orders List</span>
+		</nav>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+		<div class="row m-b-30">
+			<div class="col-lg-8">
+				<div class="d-md-flex">
+					<div class="m-b-10 m-r-15">
+
+					</div>
+					<div class="m-b-10">
+						
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 text-right">
+				<a class="btn btn-primary" href="/orders/new">
+					<i class="anticon anticon-plus-circle m-r-5"></i>
+					<span>Add Order</span>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-hover e-commerce-table" id="data-table">
+			<thead>
+				<tr>
+					<th>Customer Name</th>
+					<th>Order Date</th>
+					<th>Order Type</th>
+					<th>Garage Item</th>
+					<th>Quantity</th>
+					<th>Revenue</th>
+					<th>Cost</th>
+					<th></th>
+					<!-- Added an empty header for the delete button -->
+				</tr>
+			</thead>
+			<tbody>
+				<% for (var i = 0; i < orders.length; i++) { var customer =
+				customers.find(c => c.id === orders[i].customer_id); var item =
+				garageItems.find(g => g.id === orders[i].garage_item_id); var product =
+				products.find(p => p.id === item.product_id); var revenue =
+				orders[i].order_type === 'sell' ? (item.retail_price) *
+				orders[i].quantity : 0; var cost = orders[i].order_type === 'buy' ?
+				item.product_cost * orders[i].quantity : 0; %>
+				<tr>
+					<td>
+						<div class="d-flex align-items-center">
+								<h6 class="m-b-0 m-l-10">
+									<% if (typeof customer !== 'undefined') { %> <%= customer.name %> <%
+									} else { %> ADMIN <% } %>
+								</h6>
+						</div>
+					</td>
+					<td>
+						<%= orders[i].order_date.toLocaleDateString('en-US', { weekday:
+						'short', month: 'short', day: 'numeric', year: 'numeric' }) %>
+					</td>
+					<td><%= orders[i].order_type %></td>
+					<td><%= product.name %></td>
+					<td><%= orders[i].quantity %></td>
+					<td>
+						<% if (orders[i].order_type === 'sell') { %>
+						<%= revenue %>
+						<% } else { %><%="---"%><% } %> 
+						</td>
+					<% if (orders[i].order_type === 'buy') { %>
+					<td><%= cost %></td>
+					<% } else { %>
+					<td>---</td>
+					<% } %>
+					<td class="text-right">
+						<form
+							method="post"
+							action="/orders/<%= orders[i].id %>?_method=DELETE"
+							onsubmit="return confirm('Are you sure you want to delete this order?')">
+							<button
+								type="submit"
+								class="btn btn-icon btn-danger btn-hover btn-sm btn-rounded">
+								<i class="anticon anticon-delete"></i>
+							</button>
+						</form>
+					</td>
+				</tr>
+				<% } %>
+			</tbody>
+		</table>
+	</div>
+</div>

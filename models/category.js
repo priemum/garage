@@ -14,7 +14,6 @@ class Category {
 
 	static create(data, callback) {
         const sql = 'INSERT INTO categories SET ?';
-        console.log(data);
 		db.query(sql, data, (err, result) => {
 			if (err) {
 				return callback(err);
