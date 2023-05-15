@@ -1,37 +1,103 @@
-<% layout('layouts/boilerplate')%> 
-<h1>Garage Items</h1>
-<hr>
-<a href="/garageItems/new" class="btn btn-primary">New Item</a>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Product</th>
-      <th scope="col">Description</th>
-      <th scope="col">Category</th>
-      <th scope="col">Product Cost</th>
-      <th scope="col">Retail Price</th>
-      <th scope="col">Quantity on Hand</th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% for(var i=0; i < garageItems.length; i++) { 
-      var category = categories.find(c => c.id === garageItems[i].category_id); 
-      var product = products.find(p => p.id === garageItems[i].product_id); %>
-    <tr>
-      <td><%= product.name %></td>
-      <td><%= garageItems[i].description %></td>
-      <td><%= category.name %></td>
-      <td><%= garageItems[i].product_cost %></td>
-      <td><%= garageItems[i].retail_price %></td>
-      <td><%= garageItems[i].quantity_on_hand %></td>
-      <td>
-        <form method="post" action="/garageItems/<%= garageItems[i].id %>?_method=DELETE" onsubmit="return confirm('Are you sure you want to delete this Item?')">
-          <button type="submit" class="btn btn-danger">Delete</button>
-        </form>
-      </td>
-    </tr>
-    <% } %>
-  </tbody>
-</table>
+<% layout('layouts/boilerplate')%>
+<div class="page-header">
+	<h2 class="header-title">Garage Items List</h2>
+	<div class="header-sub-title">
+		<nav class="breadcrumb breadcrumb-dash">
+			<a href="#" class="breadcrumb-item"
+				><i class="anticon anticon-home m-r-5"></i>Home</a
+			>
+			<a class="breadcrumb-item" href="#">Items</a>
+			<span class="breadcrumb-item active">Items List</span>
+		</nav>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+		<div class="row m-b-30">
+			<div class="col-lg-8">
+				<div class="d-md-flex">
+					<div class="m-b-10 m-r-15">
+						
+					</div>
+					<div class="m-b-10">
+						
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 text-right">
+				<a class="btn btn-primary" href="/garageItems/new">
+					<i class="anticon anticon-plus-circle m-r-5"></i>
+					<span>Add Item</span>
+				</a>
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-hover e-commerce-table">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Product</th>
+						<th>Category</th>
+						<th>Cost</th>
+						<th>Price</th>
+						<th>Stock Left</th>
+						<th>Status</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% for(var i=0; i < garageItems.length; i++) { var category =
+					categories.find(c => c.id === garageItems[i].category_id); var product
+					= products.find(p => p.id === garageItems[i].product_id); %>
+					<tr class="clickable-row" data-item-id="<%=garageItems[i].id%>">
+						<td>#<%=garageItems[i].id%></td>
+						<td>
+							<div class="d-flex align-items-center">
+								<h6 class="m-b-0 m-l-10"><%= product.name %></h6>
+							</div>
+						</td>
+						<td><%= category.name %></td>
+						<td>$<%=garageItems[i].product_cost%></td>
+						<td>$<%=garageItems[i].retail_price%></td>
+						<td><%=garageItems[i].quantity_on_hand%></td>
+						<td>
+							<div class="d-flex align-items-center">
+								<div class="badge badge-success badge-dot m-r-10"></div>
+								<div>In Stock</div>
+							</div>
+						</td>
+						<td class="text-right">
+							<form
+								method="post"
+								action="/garageItems/<%= garageItems[i].id %>?_method=DELETE"
+								onsubmit="return confirm('Are you sure you want to delete this Item?')">
+								<button
+									type="submit"
+									class="btn btn-icon btn-hover btn-sm btn-rounded"
+									onclick="event.stopPropagation()">
+									<i class="anticon anticon-delete"></i>
+								</button>
+							</form>
+						</td>
+					</tr>
+					<%}%>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script>
+	// Get all the clickable rows
+	const clickableRows = document.querySelectorAll('.clickable-row');
 
+	// Add click event listener to each row
+	clickableRows.forEach((row) => {
+		row.addEventListener('click', () => {
+			// Get the item ID from the data attribute
+			const itemId = row.getAttribute('data-item-id');
+
+			// Navigate to the item's URL
+			window.location.href = `/garageItems/${itemId}`;
+		});
+	});
+</script>

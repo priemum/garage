@@ -18,7 +18,10 @@ app.engine('ejs', ejsMate);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const {checkAuthenticated,checkNotAuthenticated} = require('./middleware/auth');
+const {
+	checkAuthenticated,
+	checkNotAuthenticated,
+} = require('./middleware/auth');
 
 users = [];
 
@@ -37,7 +40,7 @@ initializePassport(
 );
 
 app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(flash());
 app.use(
 	session({
@@ -53,6 +56,7 @@ app.use(methodOverride('_method'));
 app.use((req, res, next) => {
 	res.locals.errorMessage = req.flash('error');
 	res.locals.successMessage = req.flash('success');
+	res.locals.currentUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
 	next();
 });
 
@@ -69,7 +73,7 @@ app.use('/garageItems', garageItemRoute);
 app.use('/orders', orderRoute);
 
 app.get('/', (req, res) => {
-	res.render('home.ejs');
+	res.render('users/login.ejs');
 });
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
@@ -80,7 +84,7 @@ app.post(
 	'/login',
 	checkNotAuthenticated,
 	passport.authenticate('local', {
-		successRedirect: '/',
+		successRedirect: '/monthly_profit_cost',
 		failureRedirect: '/login',
 		failureFlash: true,
 	})
@@ -90,7 +94,7 @@ app.get('/logout', (req, res) => {
 	req.logout(function (err) {
 		if (err) {
 			// handle error
-			return req.flash('error',err.message);
+			return req.flash('error', err.message);
 		}
 		res.redirect('/login');
 	});

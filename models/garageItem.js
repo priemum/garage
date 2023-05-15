@@ -37,23 +37,23 @@ class GarageItem {
 		);
 	}
 	static findById(id, callback) {
-		db.query('SELECT * FROM garageItem WHERE id = ?', [id], (err, result) => {
-			if (err) {
-				callback(err, null);
-			} else {
-				const garageItem = new GarageItem(
-					result[0].product_id,
-					result[0].description,
-					result[0].product_cost,
-					result[0].retail_price,
-					result[0].quantity_on_hand,
-					result[0].category_id
-                );
-                garageItem.id = result[0].id;
-                callback(null, garageItem);
-			}
-		});
-	}
+	db.query('SELECT * FROM garage_items WHERE id = ?', [id], (err, result) => {
+		if (err) {
+			callback(err, null);
+		} else {
+			const garageItem = new GarageItem({
+				product_id: result[0].product_id,
+				description: result[0].description,
+				product_cost: result[0].product_cost,
+				retail_price: result[0].retail_price,
+				quantity_on_hand: result[0].quantity_on_hand,
+				category_id: result[0].category_id,
+			});
+			garageItem.id = result[0].id;
+			callback(null, garageItem);
+		}
+	});
+}
 	static findAll(callback) {
 		db.query('SELECT * FROM garage_items', callback);
 	}

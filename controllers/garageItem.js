@@ -33,6 +33,40 @@ exports.index = (req, res) => {
 	});
 };
 
+exports.show = (req, res) => {
+	const id = req.params.id;
+	GarageItem.findById(id, (err, garageItem) => {
+		if (err) {
+			console.log(err);
+			res.sendStatus(500);
+			return;
+		}
+		if (!garageItem) {
+			res.sendStatus(404);
+			return;
+		}
+		Category.findAll((err, categoriesResult) => {
+			if (err) {
+				console.log(err);
+				res.sendStatus(500);
+				return;
+			}
+			Product.findAll((err, productsResult) => {
+				if (err) {
+					console.log(err);
+					res.sendStatus(500);
+					return;
+				}
+				res.render('garageItems/show', {
+					garageItem,
+					categories: categoriesResult,
+					products: productsResult,
+				});
+			});
+		});
+	})
+}
+
 exports.new = (req, res) => {
 	Category.findAll((err, categoriesResult) => {
 		if (err) {

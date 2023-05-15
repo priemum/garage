@@ -1,51 +1,95 @@
 <% layout('layouts/boilerplate')%>
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<h1>Create a New Garage Item</h1>
-			<form method="post" action="/garageItems">
-				<table class="table table-bordered">
-					<tbody>
-						<tr>
-							<th>Product</th>
-							<td>
-								<select id="product_id" name="product_id" class="form-control">
-									<% for(var i=0; i < products.length; i++) { %>
-										<option value="<%= products[i].id %>"><%= products[i].name %> (<%= products[i].universal_product_code %>)</option>
-									<% } %>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th>Description</th>
-							<td><input type="text" id="description" name="description" placeholder="description" class="form-control" /></td>
-						</tr>
-						<tr>
-							<th>Product Cost</th>
-							<td><input type="number" id="product_cost" name="product_cost" placeholder="product cost" class="form-control" step="0.01" min="0"/></td>
-						</tr>
-						<tr>
-							<th>Retail Price</th>
-							<td><input type="number" id="retail_price" name="retail_price" placeholder="retail price" class="form-control" step="0.01" min="0"/></td>
-						</tr>
-						<tr>
-							<th>Quantity on Hand</th>
-							<td><input type="number" id="quantity_on_hand" name="quantity_on_hand" placeholder="quantity on hand" class="form-control" min="0"/></td>
-						</tr>
-						<tr>
-							<th>Category</th>
-							<td>
-								<select id="category_id" name="category_id" class="form-control">
-									<% for(var i=0; i < categories.length; i++) { %>
-										<option value="<%= categories[i].id %>"><%= categories[i].name %></option>
-									<% } %>
-								</select>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<button class="btn btn-primary">Submit</button>
-			</form>
+<form method="post" action="/garageItems">
+	<div class="page-header no-gutters has-tab">
+		<div class="d-md-flex m-b-15 align-items-center justify-content-between">
+			<div class="media align-items-center m-b-15">
+				<h2>Create a new Item</h2>
+			</div>
+		</div>
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link active" data-toggle="tab" href="#product-edit-basic"
+					>Basic Info</a
+				>
+			</li>
+		</ul>
+	</div>
+	<div class="tab-content m-t-15">
+		<div class="tab-pane fade show active" id="product-edit-basic">
+			<div class="card">
+				<div class="card-body">
+					<div class="form-group">
+						<label class="font-weight-semibold" for="productName"
+							>Product Name</label
+						>
+						<select id="product_id" name="product_id" class="form-control">
+							<% for(var i=0; i < products.length; i++) { %>
+							<option value="<%= products[i].id %>">
+								<%= products[i].name %> (<%= products[i].universal_product_code
+								%>)
+							</option>
+							<% } %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label class="font-weight-semibold" for="description">Description</label>
+						<input type="text" id="description" name="description" placeholder="description" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label class="font-weight-semibold" for="product_cost"
+							>Product Cost</label
+						>
+						<input
+							type="number"
+							id="product_cost"
+							name="product_cost"
+							placeholder="product cost"
+							class="form-control"
+							step="0.01"
+							min="0" />
+					</div>
+					<div class="form-group">
+						<label class="font-weight-semibold" for="retail_price"
+							>Retail Price</label
+						>
+						<input
+							type="number"
+							id="retail_price"
+							name="retail_price"
+							placeholder="retail price"
+							class="form-control"
+							step="0.01"
+							min="0" />
+					</div>
+					<div class="form-group">
+						<label class="font-weight-semibold" for="quantity_on_hand"
+							>Stock</label
+						>
+						<input
+							type="number"
+							id="quantity_on_hand"
+							name="quantity_on_hand"
+							placeholder="Available Stock"
+							class="form-control"
+							min="0" />
+					</div>
+					<div class="form-group">
+						<label class="font-weight-semibold" for="category_id"
+							>Category</label
+						>
+						<select id="category_id" name="category_id" class="form-control">
+							<% for(var i=0; i < categories.length; i++) { %>
+							<option value="<%= categories[i].id %>">
+								<%= categories[i].name %>
+							</option>
+							<% } %>
+						</select>
+					</div>
+					<div class="text-right">
+						<button class="btn btn-primary">Submit</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-</div>
+</form>
