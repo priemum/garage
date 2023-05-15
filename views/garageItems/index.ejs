@@ -50,7 +50,7 @@
 					<% for(var i=0; i < garageItems.length; i++) { var category =
 					categories.find(c => c.id === garageItems[i].category_id); var product
 					= products.find(p => p.id === garageItems[i].product_id); %>
-					<tr class="clickable-row" data-item-id="<%=garageItems[i].id%>">
+					<tr class="clickable-row" data-item-id="<%=garageItems[i].id%>" style="cursor: pointer;">
 						<td>#<%=garageItems[i].id%></td>
 						<td>
 							<div class="d-flex align-items-center">

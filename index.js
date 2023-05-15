@@ -117,13 +117,88 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/monthly_profit_cost', checkAuthenticated, (req, res) => {
-	db.query('SELECT * FROM monthly_profit_cost', (err, result) => {
+	db.query('SELECT * FROM monthly_profit_cost', (err, monthly_profit_cost) => {
 		if (err) {
 			console.log(err);
 			res.sendStatus(500);
 			return;
 		}
-		res.render('revenues.ejs', { monthly_profit_cost: result });
+		db.query(
+			'SELECT SUM(profit) AS total_profit, SUM(cost) AS total_cost FROM monthly_profit_cost',
+			(err, total_profit_cost) => {
+				if (err) {
+					console.log(err);
+					res.sendStatus(500);
+					return;
+				}
+				const query = `
+							SELECT 
+							t1.year, 
+							t1.month, 
+							t1.profit,
+							IFNULL(ROUND(((t1.profit - t2.profit) / t2.profit) * 100, 2), 0) AS 'growth_rate'
+							FROM 
+							(SELECT * FROM monthly_profit_cost WHERE (year, month) = (YEAR(CURDATE()), MONTH(CURDATE()))) t1
+							LEFT JOIN 
+							(SELECT * FROM monthly_profit_cost WHERE (year, month) = (YEAR(CURDATE() - INTERVAL 1 MONTH), MONTH(CURDATE() - INTERVAL 1 MONTH))) t2
+							ON 
+							(t1.year = t2.year AND t1.month = t2.month + 1) OR (t1.year = t2.year + 1 AND t1.month = 1 AND t2.month = 12);
+							`;
+
+				db.query(query, (err, profit_growth) => {
+					if (err) {
+						console.log(err);
+						res.sendStatus(500);
+						return;
+					}
+					db.query(
+						'SELECT COUNT(*) as total_orders from orders',
+						(err, total_orders) => {
+							if (err) {
+								console.log(err);
+								res.sendStatus(500);
+								return;
+							}
+							db.query(
+								'SELECT count(*) as total_customers FROM customers',
+								(err, total_customers) => {
+									if (err) {
+										console.log(err);
+										res.sendStatus(500);
+										return;
+									}
+									db.query(
+										`SELECT g.product_id, p.name, SUM(o.quantity) AS total_sell_orders, g.quantity_on_hand, g.retail_price
+											FROM orders o
+											JOIN garage_items g ON o.garage_item_id = g.id
+											JOIN products p ON g.product_id = p.id
+											WHERE o.order_type = 'sell'
+											GROUP BY g.product_id, p.name, g.quantity_on_hand, g.retail_price
+											ORDER BY total_sell_orders DESC
+											LIMIT 5;`,
+										(err, top_products) => {
+											if (err) {
+												console.log(err);
+												res.sendStatus(500);
+												return;
+											}
+											res.render('revenues.ejs', {
+												monthly_profit_cost,
+												total_profit_cost,
+												total_orders,
+												profit_growth,
+												total_customers,
+												top_products,
+											});
+										}
+									);
+								}
+							);
+						}
+					);
+				});
+			}
+		);
 	});
 });
 

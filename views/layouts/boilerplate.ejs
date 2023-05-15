@@ -4,9 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Garage Management</title>
+		<title>Garage Site</title>
 		<!-- Favicon -->
-		<link rel="shortcut icon" href="/assets/images/logo/favicon.png" />
 		<!-- page css -->
 		<link
 			href="/assets/vendors/datatables/dataTables.bootstrap.min.css"
@@ -18,12 +17,10 @@
 		<%- include("../partials/flash.ejs")%>
 		<div class="app">
 			<div class="layout">
-				<%- include("../partials/header.ejs")%>
-				<%- include("../partials/sideNavbar.ejs")%>
+				<%- include("../partials/header.ejs")%> <%-
+				include("../partials/sideNavbar.ejs")%>
 				<div class="page-container">
-					<div class="main-content">
-						<%- body %>
-					</div>
+					<div class="main-content"><%- body %></div>
 					<%- include('../partials/footer.ejs')%>
 				</div>
 				<%- include('../partials/quickView.ejs')%>

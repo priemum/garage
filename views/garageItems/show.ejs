@@ -1,25 +1,20 @@
-<% layout('layouts/boilerplate')%>
-<%    var category = categories.find(c => c.id === garageItem.category_id); 
-      var product = products.find(p => p.id === garageItem.product_id); %>
+<% layout('layouts/boilerplate')%> <% var category = categories.find(c => c.id
+=== garageItem.category_id); var product = products.find(p => p.id ===
+garageItem.product_id); %>
 <div class="page-header no-gutters has-tab">
 	<div class="d-md-flex m-b-15 align-items-center justify-content-between">
 		<div class="media align-items-center m-b-15">
 			<div
 				class="avatar avatar-image rounded"
 				style="height: 70px; width: 70px">
-				<img src="assets/images/others/thumb-16.jpg"  alt="" />
+				<img src="/assets/images/others/product-icon.jpg" alt="" />
 			</div>
 			<div class="m-l-15">
 				<h4 class="m-b-0"><%=product.name%></h4>
 				<p class="text-muted m-b-0">Code: <%=garageItem.id%></p>
 			</div>
 		</div>
-		<div class="m-b-15">
-			<button class="btn btn-primary">
-				<i class="anticon anticon-edit"></i>
-				<span>Edit</span>
-			</button>
-		</div>
+		<div class="m-b-15"></div>
 	</div>
 	<ul class="nav nav-tabs">
 		<li class="nav-item">
@@ -34,18 +29,18 @@
 		<div class="tab-pane fade show active" id="product-overview">
 			<div class="row">
 				<div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="media align-items-center">
-                                <i
-                                    class="font-size-40 text-primary anticon anticon-shopping-cart"></i>
-                                <div class="m-l-15">
-                                    <p class="m-b-0 text-muted">Sales</p>
-                                    <h3 class="m-b-0 ls-1">1,521</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+					<div class="card">
+						<div class="card-body">
+							<div class="media align-items-center">
+								<i
+									class="font-size-40 text-primary anticon anticon-shopping-cart"></i>
+								<div class="m-l-15">
+									<p class="m-b-0 text-muted">Sales</p>
+									<h3 class="m-b-0 ls-1"><%=sellOrders[0].total_sell_orders%></h3>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="card">
@@ -69,7 +64,9 @@
 							<tbody>
 								<tr>
 									<td>Price:</td>
-									<td class="text-dark font-weight-semibold"><%=garageItem.retail_price%>$</td>
+									<td class="text-dark font-weight-semibold">
+										<%=garageItem.retail_price%>$
+									</td>
 								</tr>
 								<tr>
 									<td>Category:</td>
@@ -82,7 +79,13 @@
 								<tr>
 									<td>Status:</td>
 									<td>
+										<% if (garageItem.quantity_on_hand > 0) { %>
 										<span class="badge badge-pill badge-cyan">In Stock</span>
+										<% } else { %>
+										<span class="badge badge-pill badge-danger"
+											>Out of Stock</span
+										>
+										<% } %>
 									</td>
 								</tr>
 							</tbody>
@@ -94,9 +97,7 @@
 				<div class="card-header">
 					<h4 class="card-title">Product Description</h4>
 				</div>
-				<div class="card-body">
-					<%=garageItem.description%>
-				</div>
+				<div class="card-body"><%=garageItem.description%></div>
 			</div>
 		</div>
 	</div>

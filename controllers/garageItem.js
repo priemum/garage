@@ -57,15 +57,33 @@ exports.show = (req, res) => {
 					res.sendStatus(500);
 					return;
 				}
-				res.render('garageItems/show', {
-					garageItem,
-					categories: categoriesResult,
-					products: productsResult,
-				});
+				db.query(
+					`SELECT SUM(o.quantity) AS total_sell_orders
+						FROM orders o
+						JOIN garage_items g ON o.garage_item_id = g.id
+						JOIN products p ON g.product_id = p.id
+						WHERE o.order_type = 'sell' AND g.product_id = ?
+						GROUP BY g.product_id, p.name, g.quantity_on_hand, g.retail_price
+						ORDER BY total_sell_orders DESC`,
+					[garageItem.product_id],
+					(err, sellOrdersResult) => {
+						if (err) {
+							console.log(err);
+							res.sendStatus(500);
+							return;
+						}
+						res.render('garageItems/show', {
+							garageItem,
+							categories: categoriesResult,
+							products: productsResult,
+							sellOrders: sellOrdersResult,
+						});
+					}
+				);
 			});
 		});
-	})
-}
+	});
+};
 
 exports.new = (req, res) => {
 	Category.findAll((err, categoriesResult) => {
