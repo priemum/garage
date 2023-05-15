@@ -56,7 +56,23 @@ app.use(methodOverride('_method'));
 app.use((req, res, next) => {
 	res.locals.errorMessage = req.flash('error');
 	res.locals.successMessage = req.flash('success');
-	res.locals.currentUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+	const currentPath = req.path;
+	// Set a variable to track the active header
+	res.locals.header = '';
+	// Check if the current path matches any of the desired paths
+	if (currentPath === '/monthly_profit_cost') {
+		res.locals.header = 'dashboard';
+	} else if (currentPath.startsWith('/customers')) {
+		res.locals.header = 'management';
+	} else if (currentPath.startsWith('/products')) {
+		res.locals.header = 'management';
+	} else if (currentPath.startsWith('/categories')) {
+		res.locals.header = 'management';
+	} else if (currentPath.startsWith('/garageItems')) {
+		res.locals.header = 'management';
+	} else if (currentPath.startsWith('/orders')) {
+		res.locals.header = 'management';
+	}
 	next();
 });
 

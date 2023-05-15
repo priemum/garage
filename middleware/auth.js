@@ -8,7 +8,7 @@ exports.checkAuthenticated = function checkAuthenticated(req, res, next) {
 
 exports.checkNotAuthenticated = function checkNotAuthenticated(req, res, next) {
 	if (req.isAuthenticated()) {
-		return res.redirect('/');
+		return res.redirect('/monthly_profit_cost');
 	}
 	next();
 }
