@@ -36,7 +36,11 @@ garageItem.product_id); %>
 									class="font-size-40 text-primary anticon anticon-shopping-cart"></i>
 								<div class="m-l-15">
 									<p class="m-b-0 text-muted">Sales</p>
-									<h3 class="m-b-0 ls-1"><%=sellOrders[0].total_sell_orders%></h3>
+									<h3 class="m-b-0 ls-1">
+										<% if (sellOrders[0] && sellOrders[0].total_sell_orders !==
+										undefined) { %> <%= sellOrders[0].total_sell_orders %> <% }
+										else { %> 0 <% } %>
+									</h3>
 								</div>
 							</div>
 						</div>

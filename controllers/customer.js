@@ -41,33 +41,6 @@ exports.create = (req, res, next) => {
 		});
 	})
 };
-/* 
-exports.edit = (req, res, next) => {
-	Customer.findById(req.params.id, (err, customer) => {
-		if (err) {
-			return next(err);
-		}
-		res.render('customers/edit', { customer });
-	});
-};
-
-exports.update = (req, res, next) => {
-	Customer.findById(req.params.id, (err, customer) => {
-		if (err) {
-			return next(err);
-		}
-		customer.name = req.body.name || customer.name;
-		customer.email = req.body.email || customer.email;
-		customer.phone = req.body.phone || customer.phone
-		customer.save((err) => {
-			if (err) {
-				return next(err);
-			}
-			req.flash('success', 'Customer Updated Successfully');
-			res.redirect('/customers');
-		});
-	});
-}; */
 
 exports.delete = (req, res, next) => {
     Customer.findById(req.params.id, (err, customer) => {

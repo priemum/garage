@@ -20,6 +20,7 @@ exports.create = (req, res, next) => {
 		if (err) {
 			if (err.code === 'ER_DUP_ENTRY') {
 				req.flash('error', 'A product with that UPC already exists');
+				return res.redirect('/products/new');
 			} else {
 				return next(err);
 			}

@@ -1,6 +1,26 @@
 <% if (typeof errorMessage !== 'undefined' && errorMessage.length > 0) {%>
-<div class="alert alert-danger"><%= errorMessage[0]%></div>
+<div class="alert alert-danger alert-dismissible fade show">
+    <div class="d-flex align-items-center justify-content-start">
+        <span class="alert-icon">
+            <i class="anticon anticon-close-o"></i>
+        </span>
+        <span><%= errorMessage[0]%></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>   
+    </div>
+</div>
 <% } %> 
 <% if (typeof successMessage !== 'undefined' && successMessage.length >0) {%>
-<div class="alert alert-success"><%= successMessage[0]%></div>
+<div class="alert alert-success alert-dismissible fade show">
+    <div class="d-flex align-items-center justify-content-start">
+        <span class="alert-icon">
+            <i class="anticon anticon-check-o"></i>
+        </span>
+        <span><%=successMessage[0]%></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</div>
 <% } %>

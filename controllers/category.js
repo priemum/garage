@@ -19,6 +19,7 @@ exports.create = (req, res, next) => {
 		if (err) {
 			if (err.code === 'ER_DUP_ENTRY') {
 				req.flash('error', 'A Category with this name already Exists');
+				return res.redirect('/categories/new');
 			} else {
 				return next(err);
 			}
