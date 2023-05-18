@@ -9,7 +9,11 @@
 					</div>
 					<div class="m-l-15">
 						<h2 class="m-b-0">
-							$<%=total_profit_cost[0].total_profit.toLocaleString()%>
+							<%if(total_profit_cost[0].total_profit!=null){%>
+								$<%=total_profit_cost[0].total_profit.toLocaleString()%>
+							<%}else{%>
+								$0.00
+							<%}%>
 						</h2>
 						<p class="m-b-0 text-muted">Profit</p>
 					</div>
@@ -26,9 +30,13 @@
 					</div>
 					<div class="m-l-15">
 						<h2 class="m-b-0">
-							<% if (profit_growth[0].growth_rate > 0) { %> +<%=
-							profit_growth[0].growth_rate %> <% } else { %> <%=
-							profit_growth[0].growth_rate %> <% } %> %
+							<% if(profit_growth[0]){%>
+								<% if (profit_growth[0].growth_rate > 0) { %> +<%=
+								profit_growth[0].growth_rate %> <% } else { %> <%=
+								profit_growth[0].growth_rate %> <% } %> %
+							<%}else{%>
+								0%
+							<%}%>
 						</h2>
 						<p class="m-b-0 text-muted">Growth</p>
 					</div>
