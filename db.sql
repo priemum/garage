@@ -111,3 +111,39 @@ BEGIN
   END IF;
 END$$
 DELIMITER ;
+
+-- DELIMITER $$
+
+-- CREATE TRIGGER add_garage_item_cost_trigger
+-- AFTER INSERT ON garage_items
+-- FOR EACH ROW
+-- BEGIN
+--   DECLARE item_cost DECIMAL(10, 2);
+--   SET item_cost = NEW.product_cost * NEW.quantity_on_hand;
+--   INSERT INTO monthly_profit_cost (year, month, revenue, cost, profit)
+--   VALUES (
+--     EXTRACT(YEAR FROM NOW()),
+--     EXTRACT(MONTH FROM NOW()),
+--     0,
+--     item_cost,
+--     0
+--   )
+--   ON DUPLICATE KEY UPDATE
+--     cost = cost + item_cost,
+-- END$$
+
+-- DELIMITER ;
+
+-- DELIMITER $$
+
+-- CREATE TRIGGER delete_garage_item_trigger
+-- AFTER DELETE ON garage_items
+-- FOR EACH ROW
+-- BEGIN
+--   UPDATE monthly_profit_cost
+--   SET cost = cost - (OLD.product_cost * OLD.quantity_on_hand),
+--   WHERE year = EXTRACT(YEAR FROM NOW()) AND month = EXTRACT(MONTH FROM NOW());
+-- END$$
+
+-- DELIMITER ;
+
