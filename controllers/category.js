@@ -14,17 +14,17 @@ exports.new = (req, res) => {
 };
 
 exports.create = (req, res, next) => {
-    const { name } = req.body;
-	Category.create({name}, (err, category) => {
+	const { name } = req.body;
+	Category.create({ name }, (err, category) => {
 		if (err) {
 			if (err.code === 'ER_DUP_ENTRY') {
-				req.flash('error', 'A Category with this name already Exists');
+				req.flash('error', 'توجد فئة بهذا الاسم بالفعل');
 				return res.redirect('/categories/new');
 			} else {
 				return next(err);
 			}
 		} else {
-			req.flash('success', 'Category created successfully');
+			req.flash('success', 'تم إنشاء الفئة بنجاح');
 		}
 		res.redirect('/categories');
 	});
@@ -36,7 +36,7 @@ exports.delete = (req, res, next) => {
 		if (err) {
 			return next(err);
 		}
-		req.flash('success', 'Category deleted successfully');
+		req.flash('success', 'تم حذف الفئة بنجاح');
 		res.redirect('/categories');
 	});
 };

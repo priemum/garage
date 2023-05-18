@@ -19,13 +19,13 @@ exports.create = (req, res, next) => {
 	Product.create(productData, (err, product) => {
 		if (err) {
 			if (err.code === 'ER_DUP_ENTRY') {
-				req.flash('error', 'A product with that UPC already exists');
+				req.flash('error', 'منتج بهذا الكود موجود بالفعل');
 				return res.redirect('/products/new');
 			} else {
 				return next(err);
 			}
 		} else {
-			req.flash('success', 'Product created successfully');
+			req.flash('success', 'تم إنشاء المنتج بنجاح');
 		}
 		res.redirect('/products');
 	});
@@ -37,7 +37,7 @@ exports.delete = (req, res, next) => {
 		if (err) {
 			return next(err);
 		}
-		req.flash('success', 'Product deleted successfully');
+		req.flash('success', 'تم حذف المنتج بنجاح');
 		res.redirect('/products');
 	});
 };

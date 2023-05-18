@@ -1,14 +1,14 @@
 <% layout('layouts/boilerplate')%>
 <div class="page-header">
-	<h2 class="header-title">Categories List</h2>
+	<h2 class="header-title">قائمة الفئات</h2>
 	<div class="header-sub-title">
 		<nav class="breadcrumb breadcrumb-dash">
 			<a href="/monthly_profit_cost" class="breadcrumb-item"
-				><i class="anticon anticon-home m-r-5"></i>Home</a
+				><i class="anticon anticon-home m-r-5"></i>الصفحة الرئيسية</a
 			>
-			<a class="breadcrumb-item" href="/categories">Management</a>
-			<a class="breadcrumb-item" href="/categories">Categories</a>
-			<span class="breadcrumb-item active">Categories List</span>
+			<a class="breadcrumb-item" href="/categories">الإدارة</a>
+			<a class="breadcrumb-item" href="/categories">الفئات</a>
+			<span class="breadcrumb-item active">قائمة الفئات</span>
 		</nav>
 	</div>
 </div>
@@ -24,7 +24,7 @@
 			<div class="col-lg-4 text-right">
 				<a class="btn btn-primary" href="/categories/new">
 					<i class="anticon anticon-plus-circle m-r-5"></i>
-					<span>New Category</span>
+					<span>فئة جديدة</span>
 				</a>
 			</div>
 		</div>
@@ -32,8 +32,8 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th></th>
+						<th>الاسم</th>
+							<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -46,14 +46,14 @@
 								action="/categories/<%= category.id %>?_method=DELETE"
 								method="POST"
 								class="d-inline"
-								onsubmit="return confirm('Are you sure you want to delete this Category?')">
+								onsubmit="return confirm('هل أنت متأكد أنك تريد حذف هذه الفئة؟')">
 								<button
 									type="button"
 									class="btn btn-danger btn-sm"
 									data-toggle="modal"
 									data-target="#exampleModalCenter"
 									onclick="openDeleteModal(event,'category','<%= category.id %>')">
-									Delete
+									حذف
 								</button>
 							</form>
 						</td>

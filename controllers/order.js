@@ -30,7 +30,6 @@ exports.index = (req, res, next) => {
 						customers: customersResult,
 						garageItems: garageItemsResult,
 						products: productsResult,
-                        
 					});
 				});
 			});
@@ -74,7 +73,7 @@ exports.create = (req, res) => {
 		validateOrder(req.body);
 	} catch (err) {
 		req.flash('error', err.message);
-		return res.redirect("/orders/new");
+		return res.redirect('/orders/new');
 	}
 	const checkQtySql = 'SELECT quantity_on_hand FROM garage_items WHERE id = ?';
 	const sql =
@@ -89,7 +88,7 @@ exports.create = (req, res) => {
 		}
 		const quantity_on_hand = checkResult[0].quantity_on_hand;
 		if (order_type === 'sell' && quantity > quantity_on_hand) {
-			req.flash('error', 'Quantity requested exceeds quantity on hand');
+			req.flash('error', 'الكمية المطلوبة تتجاوز الكمية المتوفرة');
 			res.redirect('/orders');
 		} else {
 			const updateSql = order_type === 'sell' ? updateSqlSell : updateSqlBuy;
@@ -108,7 +107,7 @@ exports.create = (req, res) => {
 							if (updateErr) {
 								throw updateErr;
 							}
-							req.flash('success', 'Order Added Successfully');
+							req.flash('success', 'تمت إضافة الطلب بنجاح');
 							res.redirect('/orders');
 						}
 					);
@@ -159,7 +158,7 @@ exports.delete = (req, res) => {
 							return;
 						}
 
-						req.flash('success', 'Order Deleted Successfully');
+						req.flash('success', 'تم حذف الطلب بنجاح');
 						res.redirect('/orders');
 					}
 				);
@@ -175,7 +174,7 @@ exports.delete = (req, res) => {
 							return;
 						}
 
-						req.flash('success', 'Order Deleted Successfully');
+						req.flash('success', 'تم حذف الطلب بنجاح');
 						res.redirect('/orders');
 					}
 				);

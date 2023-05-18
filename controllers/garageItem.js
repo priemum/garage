@@ -120,7 +120,7 @@ exports.create = (req, res) => {
 			res.sendStatus(500);
 			return;
 		}
-		req.flash('success', 'Item Added Successfully');
+		req.flash('success', 'تمت إضافة العنصر بنجاح');
 		res.redirect('/garageItems');
 	});
 };
@@ -137,7 +137,7 @@ exports.delete = (req, res) => {
 			res.sendStatus(404);
 			return;
 		}
-		req.flash('success', 'Item Deleted Successfully');
+		req.flash('success', 'تم حذف العنصر بنجاح');
 		res.redirect('/garageItems');
 	});
 };

@@ -1,9 +1,10 @@
 <% layout('layouts/boilerplate')%>
+
 <form method="POST" action="/products">
 	<div class="page-header no-gutters has-tab">
 		<div class="d-md-flex m-b-15 align-items-center justify-content-between">
 			<div class="media align-items-center m-b-15">
-				<h2>Create Product</h2>
+				<h2>إنشاء منتج</h2>
 			</div>
 		</div>
 	</div>
@@ -12,17 +13,17 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="form-group">
-						<label class="font-weight-semibold" for="name">Name</label>
+						<label class="font-weight-semibold" for="name">الاسم</label>
 						<input
 							type="text"
 							id="name"
 							name="name"
-							placeholder="Name"
+							placeholder="الاسم"
 							class="form-control"
 							required />
 					</div>
 					<div class="form-group">
-						<label class="font-weight-semibold" for="upc">UPC</label>
+						<label class="font-weight-semibold" for="upc">رقم المنتج<</label>
 						<input
 							type="text"
 							id="upc"
@@ -32,7 +33,7 @@
 							required />
 					</div>
 					<div class="text-right">
-						<button class="btn btn-primary">Create Product</button>
+						<button class="btn btn-primary">إنشاء المنتج</button>
 					</div>
 				</div>
 			</div>

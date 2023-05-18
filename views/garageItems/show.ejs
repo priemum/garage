@@ -11,7 +11,7 @@ garageItem.product_id); %>
 			</div>
 			<div class="m-l-15">
 				<h4 class="m-b-0"><%=product.name%></h4>
-				<p class="text-muted m-b-0">Code: <%=garageItem.id%></p>
+				<p class="text-muted m-b-0">الكود: <%=garageItem.id%></p>
 			</div>
 		</div>
 		<div class="m-b-15"></div>
@@ -19,7 +19,7 @@ garageItem.product_id); %>
 	<ul class="nav nav-tabs">
 		<li class="nav-item">
 			<a class="nav-link active" data-toggle="tab" href="#product-overview"
-				>Overview</a
+				>نظرة عامة</a
 			>
 		</li>
 	</ul>
@@ -35,7 +35,7 @@ garageItem.product_id); %>
 								<i
 									class="font-size-40 text-primary anticon anticon-shopping-cart"></i>
 								<div class="m-l-15">
-									<p class="m-b-0 text-muted">Sales</p>
+									<p class="m-b-0 text-muted">المبيعات</p>
 									<h3 class="m-b-0 ls-1">
 										<% if (sellOrders[0] && sellOrders[0].total_sell_orders !==
 										undefined) { %> <%= sellOrders[0].total_sell_orders %> <% }
@@ -52,7 +52,7 @@ garageItem.product_id); %>
 							<div class="media align-items-center">
 								<i class="font-size-40 text-primary anticon anticon-stock"></i>
 								<div class="m-l-15">
-									<p class="m-b-0 text-muted">Available Stock</p>
+									<p class="m-b-0 text-muted">المخزون المتاح</p>
 									<h3 class="m-b-0 ls-1"><%=garageItem.quantity_on_hand%></h3>
 								</div>
 							</div>
@@ -62,32 +62,32 @@ garageItem.product_id); %>
 			</div>
 			<div class="card">
 				<div class="card-body">
-					<h4 class="card-title">Basic Info</h4>
+					<h4 class="card-title">معلومات أساسية</h4>
 					<div class="table-responsive">
 						<table class="product-info-table m-t-20">
 							<tbody>
 								<tr>
-									<td>Price:</td>
+									<td>السعر:</td>
 									<td class="text-dark font-weight-semibold">
 										<%=garageItem.retail_price%>$
 									</td>
 								</tr>
 								<tr>
-									<td>Category:</td>
+									<td>الفئة:</td>
 									<td><%=category.name%></td>
 								</tr>
 								<tr>
-									<td>Cost:</td>
+									<td>التكلفة:</td>
 									<td><%=garageItem.product_cost%>$</td>
 								</tr>
 								<tr>
-									<td>Status:</td>
+									<td>الحالة:</td>
 									<td>
 										<% if (garageItem.quantity_on_hand > 0) { %>
-										<span class="badge badge-pill badge-cyan">In Stock</span>
+										<span class="badge badge-pill badge-cyan">متوفر</span>
 										<% } else { %>
 										<span class="badge badge-pill badge-danger"
-											>Out of Stock</span
+											>غير متوفر</span
 										>
 										<% } %>
 									</td>
@@ -99,7 +99,7 @@ garageItem.product_id); %>
 			</div>
 			<div class="card">
 				<div class="card-header">
-					<h4 class="card-title">Product Description</h4>
+					<h4 class="card-title">وصف المنتج</h4>
 				</div>
 				<div class="card-body"><%=garageItem.description%></div>
 			</div>

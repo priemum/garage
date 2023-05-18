@@ -1,8 +1,7 @@
 const validateOrder = (order) => {
-
 	// Validate order_type
 	if (!order.order_type || !['sell', 'buy'].includes(order.order_type)) {
-		throw new Error('Invalid order type');
+		throw new Error('نوع الطلب غير صالح');
 	}
 
 	order.quantity = parseInt(order.quantity);
@@ -12,7 +11,8 @@ const validateOrder = (order) => {
 		typeof order.quantity !== 'number' ||
 		order.quantity < 1
 	) {
-		throw new Error('Invalid quantity');
+		throw new Error('الكمية غير صالحة');
 	}
 };
+
 module.exports = validateOrder;

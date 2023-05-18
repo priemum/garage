@@ -3,12 +3,12 @@ const checkEmailExists = require('../middleware/checkEmailExists');
 const validateCustomer = require('../validation/cutomers');
 
 exports.index = (req, res, next) => {
-  Customer.findAll((err, customers) => {
-    if (err) {
-      return next(err);
-    }
-    res.render('customers/index', { customers });
-  });
+	Customer.findAll((err, customers) => {
+		if (err) {
+			return next(err);
+		}
+		res.render('customers/index', { customers });
+	});
 };
 
 exports.new = (req, res) => {
@@ -28,7 +28,7 @@ exports.create = (req, res, next) => {
 			return callback(err);
 		}
 		if (exists) {
-			req.flash('error', 'Email already exists');
+			req.flash('error', 'البريد الإلكتروني موجود بالفعل');
 			return res.redirect('/customers');
 		}
 		const customer = new Customer(name, email, phone);
@@ -36,26 +36,26 @@ exports.create = (req, res, next) => {
 			if (err) {
 				return next(err);
 			}
-			req.flash('success', 'Customer Added Successfully');
+			req.flash('success', 'تمت إضافة العميل بنجاح');
 			res.redirect('/customers');
 		});
-	})
+	});
 };
 
 exports.delete = (req, res, next) => {
-    Customer.findById(req.params.id, (err, customer) => {
-        if (err) {
-            return next(err);
-        }
-        if (!customer) {
-            return res.sendStatus(404);
-        }
-        Customer.delete(customer.id, (err, result) => {
-            if (err) {
-                return next(err);
-            }
-            req.flash('success', 'Customer Deleted Successfully');
-            res.redirect('/customers');
-        });
-    });
-}
+	Customer.findById(req.params.id, (err, customer) => {
+		if (err) {
+			return next(err);
+		}
+		if (!customer) {
+			return res.sendStatus(404);
+		}
+		Customer.delete(customer.id, (err, result) => {
+			if (err) {
+				return next(err);
+			}
+			req.flash('success', 'تم حذف العميل بنجاح');
+			res.redirect('/customers');
+		});
+	});
+};
